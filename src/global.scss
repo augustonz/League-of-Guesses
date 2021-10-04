@@ -1,0 +1,20 @@
+* {
+    margin:0;
+    padding: 0;
+    font-family: 'leagueFont';
+    box-sizing: border-box;
+    --color-primary: #3A7875;
+    --color-light-primary: #A6F5D8;
+    --color-dark-primary: #14555B;
+    --color-secondary: #AE914B;
+    --color-light-secondary: #F4DE93;
+    --color-dark-secondary: #564624;
+    --color-background: #0F2220;
+    --color-black: #0c0c0c;
+    
+}
+
+@font-face {
+    font-family: 'leagueFont';
+    src: local('leagueFont'), url(./assets/fonts/leagueFont.ttf) format('truetype');
+}
