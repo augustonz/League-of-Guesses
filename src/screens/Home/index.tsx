@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import './styles.scss';
-//import useSocket from '../../hooks/useSocket';
 import { useHistory } from 'react-router-dom';
 import { useSocketContext } from '../../contexts/SocketContext';
 import Button from '../../components/Button';
@@ -12,19 +11,22 @@ const Home = () => {
     const [room,setRoom] = useState<string>('');
 
     const {joinRoom,connect,isConnected} = useSocketContext();
+    
     useEffect(()=>{
         if (!isConnected()) {
             connect(history);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     async function handleForm(ev:FormEvent) {
         ev.preventDefault();
+        
         if (room.trim().length<=0) {
-            console.log('Error informe a sala');
+            alert('Error informe a sala');
             return;
         } if (username.trim().length<=0) {
-            console.log('Error informe o usuário');
+            alert('Error informe o usuário');
             return;
         }
         const response = await joinRoom(username,room);

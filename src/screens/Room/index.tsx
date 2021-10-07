@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './styles.scss';
 
 import { useHistory } from 'react-router-dom';
@@ -8,7 +8,6 @@ import { useSocketContext } from '../../contexts/SocketContext';
 import LeagueCrown from '../../assets/icons/LeagueCrown';
 import ReadyIcon from '../../assets/icons/ReadyIcon';
 
-
 interface RoomParams {
     id:string
 }
@@ -17,8 +16,7 @@ const Room = () => {
 
     const history = useHistory();
     const params = useParams<RoomParams>();
-    const {ready,username,isAllReady,playersRoom,isLeader,changeReady,closeRoom,leaveRoom} = useSocketContext();
-    const [IsLeader,setIsLeader] = useState<boolean>(false);
+    const {ready,isAllReady,fullRoom,username,changeReady,closeRoom,leaveRoom} = useSocketContext();
     const roomId = params.id;
 
     function handleBack() {
@@ -34,27 +32,20 @@ const Room = () => {
         await changeReady();
     }
 
-    useEffect(()=>{
-        async function fetchData() {
-            setIsLeader(await isLeader());
-        }
-        fetchData();
-    },[]);
-
     return(
         <div className='room'>
             <div className='title'>
                 <h1>Room: {roomId}</h1>
             </div>
             <div className='player-list'>
-                {playersRoom.map((player,index)=>{
+                {fullRoom.users.map((player,index)=>{
                     return(
                         <div className='player-box' key={index}>
                             <img src={player.imageSrc} alt='Summoner Icon'/>
                             <span>{player.username}</span>
-                            {player.leader?
+                            {fullRoom.leader.username===player.username?
                             <LeagueCrown/>:
-                            player.ready?
+                            player.isReady?
                             <ReadyIcon/>:
                             <></>}
                         </div>
@@ -63,7 +54,7 @@ const Room = () => {
             </div>
             <footer className='buttons'>
                 <Button onClick={handleBack}>Go back</Button>
-                {IsLeader?
+                {fullRoom.leader.username===username?
                 <Button disabled={!isAllReady} onClick={handleClose}>Start game</Button>:
                 <Button onClick={handleChangeReady}>{ready?'Hold up!':'I\'m ready!'}</Button>}
             </footer>
